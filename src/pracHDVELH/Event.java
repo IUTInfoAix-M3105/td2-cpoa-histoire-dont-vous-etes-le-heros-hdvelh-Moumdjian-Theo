@@ -17,47 +17,56 @@ public class Event extends NodeMultiple {
 	public static final String ERROR_MSG_UNEXPECTED_END = "Sorry, for some unexpected reason the story ends here...";
 	public static final String PROMPT_ANSWER = "Answer: ";
 	public static final String WARNING_MSG_INTEGER_EXPECTED = "Please input a integer within range!";
+	private Scanner S;
+	private String answer;
+	private int chosenPath = 0;
+	private GUIManager gui;
+	private int id; //
+
+	
+	
 
 	/**
 	 * @return the playerAnswer
 	 */
 	public String getPlayerAnswer() {
-		/* TO BE COMPLETED */
+		return this.answer;
 	}
 
 	/**
 	 * @param playerAnswer the playerAnswer to set
 	 */
 	public void setPlayerAnswer(String playerAnswer) {
-		/* TO BE COMPLETED */
+		this.answer = playerAnswer;
 	}
 
 	/**
 	 * @return the reader
 	 */
 	public Scanner getReader() {
-		/* TO BE COMPLETED */
+		return this.S;
 	}
 
 	/**
 	 * @param reader the reader to set
 	 */
 	public void setReader(Scanner reader) {
-		/* TO BE COMPLETED */
+		this.S = reader;
 	}
 
 	/**
 	 * @return the chosenPath
 	 */
 	public int getChosenPath() {
-		/* TO BE COMPLETED */
+		return this.chosenPath;
+		
 	}
 
 	/**
 	 * @param chosenPath the chosenPath to set
 	 */
 	public void setChosenPath(int chosenPath) {
-		/* TO BE COMPLETED */
+		this.chosenPath = chosenPath;
 	}
 
 	/* Methods */
@@ -65,7 +74,9 @@ public class Event extends NodeMultiple {
 	 * @see pracHDVELH.NodeMultiple#getData()
 	 */
 	public String getData() {
-		/* TO BE COMPLETED */
+		if (super.getData() != null && super.getData().getClass().equals(String.class))
+			return (String) super.getData();
+		return null;
 	}
 
 	/**
@@ -73,7 +84,7 @@ public class Event extends NodeMultiple {
 	 * @param data
 	 */
 	public void setData(String data) {
-		/* TO BE COMPLETED */
+		super.setData(data);
 	}
 
 	/**
@@ -81,7 +92,9 @@ public class Event extends NodeMultiple {
 	 */
 	@Override
 	public Event getDaughter(int i) {
-		/* TO BE COMPLETED */
+		if (super.getDaughters() != null && super.getData().getClass().equals(String.class))
+			return (Event) super.getDaughter(i);
+		return null;
 	}
 
 	/**
@@ -90,32 +103,92 @@ public class Event extends NodeMultiple {
 	 * @param i
 	 */
 	public void setDaughter(Event daughter, int i) {
-		/* TO BE COMPLETED */
+		super.setDaughter(daughter, i);
 	}
 
 	/**
 	 * @return the gui
 	 */
 	public GUIManager getGui() {
-		/* TO BE COMPLETED */
+		return this.gui;
 	}
 
 	/**
 	 * @param gui the gui to set
 	 */
 	public void setGui(GUIManager gui) {
-		/* TO BE COMPLETED */
+		this.gui = gui;
 	}
 
 	/**
 	 * @return the id
 	 */
 	public int getId() {
-		/* TO BE COMPLETED */
+		return this.getId();
 	}
 
-	/* Methods */
-	/* TO BE COMPLETED */
+	public Event (GUIManager gui, String data) {
+		this.gui = gui;
+		this.id = nextId++;
+		
+	
+	}
+	
+	public Event()
+	{
+		this.gui = new GUIManager();
+		this.id= nextId++;
+	}
+	
+	public void run() {
+		if (isFinal())
+		{
+			return; // si il n'y a pas de fils on arrête
+		}
+		
+		gui.outputln(getData());
+		gui.outputln(PROMPT_ANSWER);
+		setPlayerAnswer(gui.read()); //gui.read permet de saisir quelque chose au clavier
+		setChosenPath(interpretAnswer()); //en fonction de la réponse on choisi le chemin suivant
+		while(chosenPath < 0) //si chosenPath est infèrieur à 0 alors erreur on recommence les étapes du dessus
+		{
+			setPlayerAnswer(gui.read()); 
+			setChosenPath(interpretAnswer());
+		}
+		
+		getDaughter(chosenPath).run();
+		
+	}
+	
+	public boolean isInRange(int index)
+	{
+		if (index < 0)
+		{
+			return false; // gestion erreur
+		}
+		int cpt = 0;
+		while( cpt < NODE_MAX_ARITY && getDaughter(max) != null)
+		{
+			cpt += 1;
+		}
+		
+		if (index >= cpt)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	public String toString()
+	{
+		return "Event #"+getId()+"("+getClass().getName()+")"+": "+(String) getData();
+	}
+	public boolean isFinal()
+	{
+		return !hasDaughters();
 	}
 }
 
