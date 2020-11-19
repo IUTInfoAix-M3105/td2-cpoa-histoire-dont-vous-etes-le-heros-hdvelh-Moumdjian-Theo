@@ -191,10 +191,7 @@ public class Event extends NodeMultiple {
 	{
 		return !hasDaughters();
 	}
-	public void test()
-	{
-		return test;
-	}
+
 }
 
 // eof
