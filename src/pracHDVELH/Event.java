@@ -5,6 +5,7 @@
  */
 package pracHDVELH;
 
+import java.*;
 import java.util.Scanner;
 
 import myUtils.ErrorNaiveHandler;
@@ -189,6 +190,10 @@ public class Event extends NodeMultiple {
 	public boolean isFinal()
 	{
 		return !hasDaughters();
+	}
+	public void test()
+	{
+		return test;
 	}
 }
 
