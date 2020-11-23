@@ -28,17 +28,17 @@ public class Event extends NodeMultiple {
 	
 
 	/**
-	 * @return the playerAnswer
+	 * @return the answer
 	 */
-	public String getPlayerAnswer() {
+	public String getanswer() {
 		return this.answer;
 	}
 
 	/**
-	 * @param playerAnswer the playerAnswer to set
+	 * @param answer the answer to set
 	 */
-	public void setPlayerAnswer(String playerAnswer) {
-		this.answer = playerAnswer;
+	public void setanswer(String answer) {
+		this.answer = answer;
 	}
 
 	/**
@@ -141,6 +141,25 @@ public class Event extends NodeMultiple {
 		this.id= nextId++;
 	}
 	
+	public int interpretAnswer() {
+		if (answer == null) {
+			ErrorNaiveHandler.abort(ERROR_MSG_UNEXPECTED_END);
+		}
+
+		if(!answer.matches("[1-9]+"))
+			return -1;
+		
+		// player answer is not null, not empty and is numeric
+		
+		int res = Integer.parseInt(answer);
+		res -= 1;
+
+		if (!isInRange(res)) // not in range
+			return -1;
+		
+		return res;
+	}
+	
 	public void run() {
 		if (isFinal())
 		{
@@ -149,11 +168,11 @@ public class Event extends NodeMultiple {
 		
 		gui.outputln(getData());
 		gui.outputln(PROMPT_ANSWER);
-		setPlayerAnswer(gui.read()); //gui.read permet de saisir quelque chose au clavier
+		setanswer(gui.read()); //gui.read permet de saisir quelque chose au clavier
 		setChosenPath(interpretAnswer()); //en fonction de la réponse on choisi le chemin suivant
 		while(chosenPath < 0) //si chosenPath est infèrieur à 0 alors erreur on recommence les étapes du dessus
 		{
-			setPlayerAnswer(gui.read()); 
+			setanswer(gui.read()); 
 			setChosenPath(interpretAnswer());
 		}
 		
