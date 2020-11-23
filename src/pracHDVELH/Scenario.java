@@ -16,6 +16,40 @@ public class Scenario {
 	private GUIManager gui;
 
 	/* TO BE COMPLETED */
+	
+	public Scenario(GUIManager gui,Event tete)
+	{
+		this.head = tete;
+		this.gui = gui;
+	}
+	
+	public Event getHead() {
+		return this.head;
+	}
+	public GUIManager getGUI() {
+		return this.gui;
+	}
+	public void setGUI(GUIManager gui)
+	{
+		this.gui = gui;
+	}
+	public void setHead(Event head) {
+		this.head = head;
+	}
+	
+	public String run()
+	{
+		if(getHead() == null)
+		{
+			gui.output(MSG_EMPTY_SCENARIO);
+			return MSG_EMPTY_SCENARIO;
+		}
+		else 
+		{
+			getHead().run();
+			return MSG_FINALE;
+		}
+	}
 
 	/* MAIN */
 	public static void main(String[] args) {
